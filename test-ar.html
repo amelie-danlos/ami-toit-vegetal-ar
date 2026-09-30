@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+  <title>CocoCombo - Test AR</title>
+
+  <script type="module"
+    src="https://ajax.googleapis.com/ajax/libs/model-viewer/4.1.0/model-viewer.min.js">
+  </script>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background: #ffffff;
+    }
+
+    h1 {
+      font-size: 24px;
+      margin: 20px 15px 5px;
+    }
+
+    p {
+      margin: 5px 20px 15px;
+    }
+
+    model-viewer {
+      width: 100%;
+      height: 70vh;
+      background-color: #eeeeee;
+    }
+
+    .ar-button {
+      background: #2f7d32;
+      color: white;
+      border: none;
+      border-radius: 25px;
+      padding: 14px 22px;
+      font-size: 17px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+
+<body>
+
+  <h1>🌿 CocoCombo</h1>
+
+  <p>
+    Découvrez le toit végétalisé de notre Citroën AMI
+  </p>
+
+  <model-viewer
+    src="./soil+block+planter+3d+model.glb"
+    alt="Toit végétalisé CocoCombo"
+    camera-controls
+    auto-rotate
+    shadow-intensity="1"
+    ar
+    ar-modes="webxr scene-viewer quick-look"
+    ar-placement="floor">
+
+    <button
+      slot="ar-button"
+      class="ar-button">
+      📱 Voir le toit en réalité augmentée
+    </button>
+
+  </model-viewer>
+
+</body>
+</html>
