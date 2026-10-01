@@ -88,6 +88,12 @@
   </div>
 
   <div class="row">
+    INCLINAISON<br>
+    <button onclick="tilt(-5)">↖ Incliner</button>
+    <button onclick="tilt(5)">↘ Redresser</button>
+  </div>
+
+  <div class="row">
     <button onclick="resetModel()">Réinitialiser</button>
   </div>
 
@@ -141,6 +147,7 @@ let y = 1.3;
 let z = 0;
 let scale = 2;
 let ry = 0;
+let rx = 0;
 
 function updateModel() {
 
@@ -158,7 +165,7 @@ function updateModel() {
 
   roof.setAttribute(
     "rotation",
-    `0 ${ry} 0`
+    `${rx} ${ry} 0`
   );
 
   document.querySelector("#values").innerHTML =
@@ -166,7 +173,8 @@ function updateModel() {
      Y=${y.toFixed(2)} &nbsp;
      Z=${z.toFixed(2)} &nbsp;
      Taille=${scale.toFixed(2)} &nbsp;
-     Rotation=${ry}°`;
+     Rotation=${ry}° &nbsp;
+     Inclinaison=${rx}°`;
 }
 
 function move(dx,dy,dz) {
@@ -186,12 +194,18 @@ function rotateY(angle) {
   updateModel();
 }
 
+function tilt(angle) {
+  rx += angle;
+  updateModel();
+}
+
 function resetModel() {
   x = 0;
   y = 1.3;
   z = 0;
   scale = 2;
   ry = 0;
+  rx = 0;
   updateModel();
 }
 
