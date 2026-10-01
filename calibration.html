@@ -81,23 +81,23 @@
     <button onclick="resize(0.9)">➖ Réduire</button>
   </div>
 
-  div class="row">
-  ROTATION X<br>
-  <button onclick="rotateX(-5)">X −5°</button>
-  <button onclick="rotateX(5)">X +5°</button>
-</div>
+  <div class="row">
+    ROTATION X<br>
+    <button onclick="rotateX(-5)">X −5°</button>
+    <button onclick="rotateX(5)">X +5°</button>
+  </div>
 
-<div class="row">
-  ROTATION Y<br>
-  <button onclick="rotateY(-5)">Y −5°</button>
-  <button onclick="rotateY(5)">Y +5°</button>
-</div>
+  <div class="row">
+    ROTATION Y<br>
+    <button onclick="rotateY(-5)">Y −5°</button>
+    <button onclick="rotateY(5)">Y +5°</button>
+  </div>
 
-<div class="row">
-  ROTATION Z<br>
-  <button onclick="rotateZ(-5)">Z −5°</button>
-  <button onclick="rotateZ(5)">Z +5°</button>
-</div>
+  <div class="row">
+    ROTATION Z<br>
+    <button onclick="rotateZ(-5)">Z −5°</button>
+    <button onclick="rotateZ(5)">Z +5°</button>
+  </div>
 
   <div class="row">
     <button onclick="resetModel()">Réinitialiser</button>
@@ -152,9 +152,11 @@ let x = 0;
 let y = 1.3;
 let z = 0;
 let scale = 2;
+
 let rx = 0;
 let ry = 0;
 let rz = 0;
+
 
 function updateModel() {
 
@@ -171,56 +173,79 @@ function updateModel() {
   );
 
   roof.setAttribute(
-  "rotation",
-  `${rx} ${ry} ${rz}`
-);
+    "rotation",
+    `${rx} ${ry} ${rz}`
+  );
 
   document.querySelector("#values").innerHTML =
-  `X=${x.toFixed(2)} &nbsp;
-   Y=${y.toFixed(2)} &nbsp;
-   Z=${z.toFixed(2)} &nbsp;
-   Taille=${scale.toFixed(2)}<br>
-   RotX=${rx}° &nbsp;
-   RotY=${ry}° &nbsp;
-   RotZ=${rz}°`;
-  
+    `X=${x.toFixed(2)} &nbsp;
+     Y=${y.toFixed(2)} &nbsp;
+     Z=${z.toFixed(2)} &nbsp;
+     Taille=${scale.toFixed(2)}<br>
+     RotX=${rx}° &nbsp;
+     RotY=${ry}° &nbsp;
+     RotZ=${rz}°`;
+
+}
+
+
 function move(dx,dy,dz) {
+
   x += dx;
   y += dy;
   z += dz;
+
   updateModel();
 }
+
 
 function resize(factor) {
+
   scale *= factor;
+
   updateModel();
 }
+
 
 function rotateX(angle) {
+
   rx += angle;
+
   updateModel();
 }
+
 
 function rotateY(angle) {
+
   ry += angle;
+
   updateModel();
 }
+
 
 function rotateZ(angle) {
+
   rz += angle;
+
   updateModel();
 }
 
+
 function resetModel() {
+
   x = 0;
   y = 1.3;
   z = 0;
+
   scale = 2;
-  ry = 0;
+
   rx = 0;
+  ry = 0;
   rz = 0;
+
   updateModel();
 }
+
 
 window.addEventListener("load", updateModel);
 
