@@ -152,8 +152,9 @@ let x = 0;
 let y = 1.3;
 let z = 0;
 let scale = 2;
-let ry = 0;
 let rx = 0;
+let ry = 0;
+let rz = 0;
 
 function updateModel() {
 
@@ -170,19 +171,19 @@ function updateModel() {
   );
 
   roof.setAttribute(
-    "rotation",
-    `${rx} ${ry} 0`
-  );
+  "rotation",
+  `${rx} ${ry} ${rz}`
+);
 
   document.querySelector("#values").innerHTML =
-    `X=${x.toFixed(2)} &nbsp;
-     Y=${y.toFixed(2)} &nbsp;
-     Z=${z.toFixed(2)} &nbsp;
-     Taille=${scale.toFixed(2)} &nbsp;
-     Rotation=${ry}° &nbsp;
-     Inclinaison=${rx}°`;
-}
-
+  `X=${x.toFixed(2)} &nbsp;
+   Y=${y.toFixed(2)} &nbsp;
+   Z=${z.toFixed(2)} &nbsp;
+   Taille=${scale.toFixed(2)}<br>
+   RotX=${rx}° &nbsp;
+   RotY=${ry}° &nbsp;
+   RotZ=${rz}°`;
+  
 function move(dx,dy,dz) {
   x += dx;
   y += dy;
@@ -195,13 +196,18 @@ function resize(factor) {
   updateModel();
 }
 
+function rotateX(angle) {
+  rx += angle;
+  updateModel();
+}
+
 function rotateY(angle) {
   ry += angle;
   updateModel();
 }
 
-function tilt(angle) {
-  rx += angle;
+function rotateZ(angle) {
+  rz += angle;
   updateModel();
 }
 
@@ -212,6 +218,7 @@ function resetModel() {
   scale = 2;
   ry = 0;
   rx = 0;
+  rz = 0;
   updateModel();
 }
 
