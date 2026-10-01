@@ -1,10 +1,4 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <title>CocoCombo - Calibration AR</title>
+<title>CocoCombo - Calibration AR</title>
 
   <script src="https://aframe.io/releases/1.6.0/aframe.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
@@ -19,33 +13,34 @@
     #panel {
       position: fixed;
       z-index: 9999;
-      bottom: 10px;
+      bottom: 5px;
       left: 50%;
       transform: translateX(-50%);
-      width: 94%;
+      width: 95%;
       max-width: 520px;
       background: rgba(255,255,255,0.92);
-      border-radius: 14px;
-      padding: 8px;
+      border-radius: 12px;
+      padding: 6px;
       text-align: center;
     }
 
     #values {
       font-size: 12px;
-      margin-bottom: 6px;
       font-weight: bold;
+      margin-bottom: 4px;
     }
 
     .row {
-      margin: 4px 0;
+      margin: 3px 0;
+      font-size: 12px;
     }
 
     button {
-      font-size: 14px;
-      padding: 7px 10px;
-      margin: 2px;
+      font-size: 13px;
+      padding: 6px 9px;
+      margin: 1px;
       border: 1px solid #555;
-      border-radius: 8px;
+      border-radius: 7px;
       background: white;
     }
   </style>
@@ -55,48 +50,48 @@
 
 <div id="panel">
 
-  <div id="values"></div>
+  <div id="values">Chargement...</div>
 
   <div class="row">
-    POSITION HORIZONTALE<br>
-    <button onclick="move(-0.1,0,0)">⬅️ Gauche</button>
-    <button onclick="move(0.1,0,0)">Droite ➡️</button>
+    POSITION
+    <button onclick="move(-0.1,0,0)">⬅️</button>
+    <button onclick="move(0.1,0,0)">➡️</button>
   </div>
 
   <div class="row">
-    HAUTEUR<br>
-    <button onclick="move(0,0.1,0)">⬆️ Monter</button>
-    <button onclick="move(0,-0.1,0)">⬇️ Descendre</button>
+    HAUTEUR
+    <button onclick="move(0,0.1,0)">⬆️</button>
+    <button onclick="move(0,-0.1,0)">⬇️</button>
   </div>
 
   <div class="row">
-    PROFONDEUR<br>
-    <button onclick="move(0,0,0.1)">➕ Avant</button>
-    <button onclick="move(0,0,-0.1)">➖ Arrière</button>
+    PROFONDEUR
+    <button onclick="move(0,0,0.1)">Avant</button>
+    <button onclick="move(0,0,-0.1)">Arrière</button>
   </div>
 
   <div class="row">
-    TAILLE<br>
-    <button onclick="resize(1.1)">➕ Agrandir</button>
-    <button onclick="resize(0.9)">➖ Réduire</button>
+    TAILLE
+    <button onclick="resizeModel(1.1)">＋</button>
+    <button onclick="resizeModel(0.9)">－</button>
   </div>
 
   <div class="row">
-    ROTATION X<br>
-    <button onclick="rotateX(-5)">X −5°</button>
-    <button onclick="rotateX(5)">X +5°</button>
+    ROTATION X
+    <button onclick="rotateX(-5)">−5°</button>
+    <button onclick="rotateX(5)">+5°</button>
   </div>
 
   <div class="row">
-    ROTATION Y<br>
-    <button onclick="rotateY(-5)">Y −5°</button>
-    <button onclick="rotateY(5)">Y +5°</button>
+    ROTATION Y
+    <button onclick="rotateY(-5)">−5°</button>
+    <button onclick="rotateY(5)">+5°</button>
   </div>
 
   <div class="row">
-    ROTATION Z<br>
-    <button onclick="rotateZ(-5)">Z −5°</button>
-    <button onclick="rotateZ(5)">Z +5°</button>
+    ROTATION Z
+    <button onclick="rotateZ(-5)">−5°</button>
+    <button onclick="rotateZ(5)">+5°</button>
   </div>
 
   <div class="row">
@@ -104,6 +99,7 @@
   </div>
 
 </div>
+
 
 <a-scene
   mindar-image="
@@ -121,133 +117,187 @@
   device-orientation-permission-ui="enabled: false">
 
   <a-assets>
+
     <a-asset-item
       id="toit"
       src="./soil+block+planter+3d+model.glb">
     </a-asset-item>
+
   </a-assets>
+
 
   <a-camera
     position="0 0 0"
     look-controls="enabled: false">
   </a-camera>
 
+
   <a-entity mindar-image-target="targetIndex: 0">
 
-    <a-gltf-model
-      id="roof"
-      src="#toit"
-      position="0 1.3 0"
-      rotation="0 0 0"
-      scale="2 2 2">
-    </a-gltf-model>
+    <!--
+      Le conteneur reçoit les transformations.
+      Le GLB reste à l'intérieur sans transformation.
+    -->
+
+    <a-entity id="roofContainer">
+
+      <a-gltf-model
+        src="#toit">
+      </a-gltf-model>
+
+    </a-entity>
 
   </a-entity>
 
 </a-scene>
 
+
 <script>
 
-let x = 0;
-let y = 1.3;
-let z = 0;
-let scale = 2;
+  // ----------------------------
+  // VALEURS DE CALIBRATION
+  // ----------------------------
 
-let rx = 0;
-let ry = 0;
-let rz = 0;
+  let x = 0;
+  let y = 1.3;
+  let z = 0;
+
+  let scaleValue = 2;
+
+  let rx = 0;
+  let ry = 0;
+  let rz = 0;
 
 
-function updateModel() {
+  // ----------------------------
+  // MISE À JOUR DU MODÈLE
+  // ----------------------------
 
-  const roof = document.querySelector("#roof");
+  function updateModel() {
 
-  roof.setAttribute(
-    "position",
-    `${x} ${y} ${z}`
+    const container =
+      document.querySelector("#roofContainer");
+
+    if (!container || !container.object3D) {
+      return;
+    }
+
+    // Position
+    container.object3D.position.set(
+      x,
+      y,
+      z
+    );
+
+    // Taille
+    container.object3D.scale.set(
+      scaleValue,
+      scaleValue,
+      scaleValue
+    );
+
+    // Rotation en radians
+    container.object3D.rotation.set(
+      THREE.MathUtils.degToRad(rx),
+      THREE.MathUtils.degToRad(ry),
+      THREE.MathUtils.degToRad(rz),
+      "XYZ"
+    );
+
+    // Affichage des valeurs
+    document.querySelector("#values").innerHTML =
+      `X=${x.toFixed(2)} &nbsp;
+       Y=${y.toFixed(2)} &nbsp;
+       Z=${z.toFixed(2)} &nbsp;
+       Taille=${scaleValue.toFixed(2)}
+       <br>
+       RotX=${rx}° &nbsp;
+       RotY=${ry}° &nbsp;
+       RotZ=${rz}°`;
+  }
+
+
+  // ----------------------------
+  // POSITION
+  // ----------------------------
+
+  function move(dx, dy, dz) {
+
+    x += dx;
+    y += dy;
+    z += dz;
+
+    updateModel();
+  }
+
+
+  // ----------------------------
+  // TAILLE
+  // ----------------------------
+
+  function resizeModel(factor) {
+
+    scaleValue *= factor;
+
+    updateModel();
+  }
+
+
+  // ----------------------------
+  // ROTATIONS
+  // ----------------------------
+
+  function rotateX(angle) {
+
+    rx += angle;
+
+    updateModel();
+  }
+
+
+  function rotateY(angle) {
+
+    ry += angle;
+
+    updateModel();
+  }
+
+
+  function rotateZ(angle) {
+
+    rz += angle;
+
+    updateModel();
+  }
+
+
+  // ----------------------------
+  // RESET
+  // ----------------------------
+
+  function resetModel() {
+
+    x = 0;
+    y = 1.3;
+    z = 0;
+
+    scaleValue = 2;
+
+    rx = 0;
+    ry = 0;
+    rz = 0;
+
+    updateModel();
+  }
+
+
+  // Initialisation
+  window.addEventListener(
+    "load",
+    function() {
+      setTimeout(updateModel, 1000);
+    }
   );
-
-  roof.setAttribute(
-    "scale",
-    `${scale} ${scale} ${scale}`
-  );
-
-  roof.setAttribute(
-    "rotation",
-    `${rx} ${ry} ${rz}`
-  );
-
-  document.querySelector("#values").innerHTML =
-    `X=${x.toFixed(2)} &nbsp;
-     Y=${y.toFixed(2)} &nbsp;
-     Z=${z.toFixed(2)} &nbsp;
-     Taille=${scale.toFixed(2)}<br>
-     RotX=${rx}° &nbsp;
-     RotY=${ry}° &nbsp;
-     RotZ=${rz}°`;
-
-}
-
-
-function move(dx,dy,dz) {
-
-  x += dx;
-  y += dy;
-  z += dz;
-
-  updateModel();
-}
-
-
-function resize(factor) {
-
-  scale *= factor;
-
-  updateModel();
-}
-
-
-function rotateX(angle) {
-
-  rx += angle;
-
-  updateModel();
-}
-
-
-function rotateY(angle) {
-
-  ry += angle;
-
-  updateModel();
-}
-
-
-function rotateZ(angle) {
-
-  rz += angle;
-
-  updateModel();
-}
-
-
-function resetModel() {
-
-  x = 0;
-  y = 1.3;
-  z = 0;
-
-  scale = 2;
-
-  rx = 0;
-  ry = 0;
-  rz = 0;
-
-  updateModel();
-}
-
-
-window.addEventListener("load", updateModel);
 
 </script>
 
