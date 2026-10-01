@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+  <title>AMITech - Réalité augmentée</title>
+
+  <script type="module"
+    src="https://ajax.googleapis.com/ajax/libs/model-viewer/4.3.1/model-viewer.min.js">
+  </script>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background: #ffffff;
+    }
+
+    h1 {
+      margin: 18px 10px 4px;
+      font-size: 26px;
+    }
+
+    .subtitle {
+      margin: 4px 20px 12px;
+      font-size: 16px;
+    }
+
+    model-viewer {
+      width: 100%;
+      height: 72vh;
+      background: #eeeeee;
+    }
+
+    .ar-button {
+      background: #1769aa;
+      color: white;
+      border: none;
+      border-radius: 28px;
+      padding: 14px 22px;
+      font-size: 17px;
+      font-weight: bold;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.25);
+    }
+
+    .help {
+      margin: 10px 20px;
+      font-size: 14px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <h1>☀️ AMITech</h1>
+
+  <div class="subtitle">
+    Découvrez notre Citroën AMI solaire en réalité augmentée
+  </div>
+
+  <model-viewer
+    src="./compactcar_3d_model-v4.glb"
+    alt="Citroën AMI solaire - projet AMITech"
+    camera-controls
+    auto-rotate
+    shadow-intensity="1"
+    ar
+    ar-modes="webxr scene-viewer quick-look"
+    ar-placement="floor">
+
+    <button
+      slot="ar-button"
+      class="ar-button">
+      📱 Faites apparaître AMITech
+    </button>
+
+  </model-viewer>
+
+  <div class="help">
+    En réalité augmentée, visez une table ou une surface plane,
+    puis placez la voiture.
+  </div>
+
+</body>
+</html>
