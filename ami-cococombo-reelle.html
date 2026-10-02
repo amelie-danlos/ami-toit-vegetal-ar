@@ -1,1 +1,738 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0">
 
+  <title>Mission CocoCombo</title>
+
+  <script src="https://aframe.io/releases/1.6.0/aframe.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
+
+  <style>
+
+    body {
+      margin: 0;
+      overflow: hidden;
+      font-family: Arial, sans-serif;
+    }
+
+    /* -------------------------
+       PANNEAU DU JEU
+       ------------------------- */
+
+    #panel {
+      position: fixed;
+      z-index: 9999;
+      bottom: 8px;
+      left: 50%;
+      transform: translateX(-50%);
+
+      width: 94%;
+      max-width: 520px;
+
+      background: rgba(255,255,255,0.92);
+
+      border-radius: 18px;
+      padding: 8px;
+
+      text-align: center;
+
+      box-shadow: 0 3px 15px rgba(0,0,0,0.25);
+    }
+
+    #title {
+      font-size: 20px;
+      font-weight: bold;
+      color: #08783e;
+      margin-bottom: 2px;
+    }
+
+    #instruction {
+      font-size: 12px;
+      margin-bottom: 6px;
+    }
+
+    .row {
+      margin: 3px 0;
+    }
+
+    .label {
+      font-size: 11px;
+      font-weight: bold;
+      color: #444;
+    }
+
+    button {
+      font-size: 15px;
+
+      min-width: 58px;
+
+      padding: 7px 10px;
+      margin: 2px;
+
+      border: 1px solid #777;
+      border-radius: 9px;
+
+      background: white;
+
+      touch-action: manipulation;
+    }
+
+    button:active {
+      background: #dff4e7;
+      transform: scale(0.96);
+    }
+
+    /* bouton mission */
+
+    #successButton {
+      margin-top: 5px;
+
+      padding: 9px 18px;
+
+      font-size: 16px;
+      font-weight: bold;
+
+      background: #148447;
+      color: white;
+
+      border: none;
+      border-radius: 12px;
+    }
+
+
+    /* -------------------------
+       ÉCRAN DE RÉUSSITE
+       ------------------------- */
+
+    #success {
+      display: none;
+
+      position: fixed;
+      z-index: 10000;
+
+      top: 12px;
+      left: 50%;
+      transform: translateX(-50%);
+
+      width: 88%;
+      max-width: 480px;
+
+      background: rgba(255,255,255,0.92);
+
+      padding: 12px;
+
+      border-radius: 18px;
+
+      text-align: center;
+
+      box-shadow: 0 3px 15px rgba(0,0,0,0.25);
+    }
+
+    #successTitle {
+      font-size: 22px;
+      font-weight: bold;
+      color: #08783e;
+    }
+
+    #successText {
+      font-size: 14px;
+      margin: 5px;
+    }
+
+    #replayButton {
+      font-size: 14px;
+      padding: 7px 14px;
+      margin-top: 5px;
+
+      border-radius: 10px;
+      border: 1px solid #777;
+
+      background: white;
+    }
+
+  </style>
+</head>
+
+
+<body>
+
+
+<!-- =================================================
+     INTERFACE DU JEU
+     ================================================= -->
+
+<div id="panel">
+
+  <div id="title">
+    🌿 Mission CocoCombo 🌿
+  </div>
+
+  <div id="instruction">
+    Placez le toit végétalisé sur la Citroën AMI !
+  </div>
+
+
+  <!-- POSITION -->
+
+  <div class="row">
+
+    <span class="label">DÉPLACER</span><br>
+
+    <button
+      data-action="left"
+      onclick="move(-0.1,0,0)">
+      ⬅️
+    </button>
+
+    <button
+      data-action="up"
+      onclick="move(0,0.1,0)">
+      ⬆️
+    </button>
+
+    <button
+      data-action="down"
+      onclick="move(0,-0.1,0)">
+      ⬇️
+    </button>
+
+    <button
+      data-action="right"
+      onclick="move(0.1,0,0)">
+      ➡️
+    </button>
+
+  </div>
+
+
+  <!-- PROFONDEUR -->
+
+  <div class="row">
+
+    <span class="label">AVANT / ARRIÈRE</span><br>
+
+    <button
+      data-action="forward"
+      onclick="move(0,0,0.1)">
+      ⬆ Avant
+    </button>
+
+    <button
+      data-action="backward"
+      onclick="move(0,0,-0.1)">
+      ⬇ Arrière
+    </button>
+
+  </div>
+
+
+  <!-- ROTATIONS -->
+
+  <div class="row">
+
+    <span class="label">INCLINER</span><br>
+
+    <button
+      data-action="rxminus"
+      onclick="rotateX(-5)">
+      ↖
+    </button>
+
+    <button
+      data-action="rxplus"
+      onclick="rotateX(5)">
+      ↘
+    </button>
+
+  </div>
+
+
+  <div class="row">
+
+    <span class="label">TOURNER</span><br>
+
+    <button
+      data-action="ryminus"
+      onclick="rotateY(-5)">
+      ↶
+    </button>
+
+    <button
+      data-action="ryplus"
+      onclick="rotateY(5)">
+      ↷
+    </button>
+
+  </div>
+
+
+  <div class="row">
+
+    <span class="label">BASCULER</span><br>
+
+    <button
+      data-action="rzminus"
+      onclick="rotateZ(-5)">
+      ↙
+    </button>
+
+    <button
+      data-action="rzplus"
+      onclick="rotateZ(5)">
+      ↗
+    </button>
+
+  </div>
+
+
+  <!-- TAILLE -->
+
+  <div class="row">
+
+    <span class="label">TAILLE</span><br>
+
+    <button
+      data-action="smaller"
+      onclick="resizeModel(0.95)">
+      ➖
+    </button>
+
+    <button
+      data-action="bigger"
+      onclick="resizeModel(1.05)">
+      ➕
+    </button>
+
+  </div>
+
+
+  <button
+    id="successButton"
+    onclick="missionComplete()">
+
+    🌿 Mission accomplie !
+
+  </button>
+
+</div>
+
+
+
+<!-- =================================================
+     MESSAGE FINAL
+     ================================================= -->
+
+<div id="success">
+
+  <div id="successTitle">
+    🎉 Bravo !
+  </div>
+
+  <div id="successText">
+    Vous avez végétalisé la Citroën AMI ! 🌿
+    <br>
+    📸 Admirez votre création !
+  </div>
+
+  <button
+    id="replayButton"
+    onclick="replay()">
+
+    🔄 Rejouer
+
+  </button>
+
+</div>
+
+
+
+<!-- =================================================
+     SCÈNE AR
+     ================================================= -->
+
+<a-scene
+
+  mindar-image="
+    imageTargetSrc: ./targets.mind;
+    autoStart: true;
+    filterMinCF: 0.001;
+    filterBeta: 0.01;
+    missCount: 20;
+    warmupTolerance: 5;
+    missTolerance: 5;
+  "
+
+  color-space="sRGB"
+
+  renderer="
+    colorManagement: true;
+    physicallyCorrectLights
+  "
+
+  vr-mode-ui="enabled: false"
+
+  device-orientation-permission-ui="enabled: false">
+
+
+  <a-assets>
+
+    <a-asset-item
+      id="toit"
+      src="./soil+block+planter+3d+model.glb">
+    </a-asset-item>
+
+  </a-assets>
+
+
+  <a-camera
+    position="0 0 0"
+    look-controls="enabled: false">
+  </a-camera>
+
+
+  <a-entity
+    mindar-image-target="targetIndex: 0">
+
+
+    <a-entity id="roofContainer">
+
+      <a-gltf-model
+        src="#toit">
+      </a-gltf-model>
+
+    </a-entity>
+
+
+  </a-entity>
+
+</a-scene>
+
+
+
+<script>
+
+
+/* =================================================
+   POSITION INITIALE
+   ================================================= */
+
+let x = 0;
+let y = 1.3;
+let z = 0;
+
+let scaleValue = 2;
+
+let rx = 0;
+let ry = 0;
+let rz = 0;
+
+
+/* =================================================
+   MISE À JOUR
+   ================================================= */
+
+function updateModel() {
+
+  const container =
+    document.querySelector("#roofContainer");
+
+  if (!container || !container.object3D) {
+    return;
+  }
+
+
+  container.object3D.position.set(
+    x,
+    y,
+    z
+  );
+
+
+  container.object3D.scale.set(
+    scaleValue,
+    scaleValue,
+    scaleValue
+  );
+
+
+  container.object3D.rotation.set(
+
+    THREE.MathUtils.degToRad(rx),
+
+    THREE.MathUtils.degToRad(ry),
+
+    THREE.MathUtils.degToRad(rz),
+
+    "XYZ"
+
+  );
+
+}
+
+
+/* =================================================
+   DÉPLACEMENT
+   ================================================= */
+
+function move(dx,dy,dz) {
+
+  x += dx;
+  y += dy;
+  z += dz;
+
+  updateModel();
+
+}
+
+
+/* =================================================
+   TAILLE
+   ================================================= */
+
+function resizeModel(factor) {
+
+  scaleValue *= factor;
+
+  updateModel();
+
+}
+
+
+/* =================================================
+   ROTATIONS
+   ================================================= */
+
+function rotateX(angle) {
+
+  rx += angle;
+
+  updateModel();
+
+}
+
+
+function rotateY(angle) {
+
+  ry += angle;
+
+  updateModel();
+
+}
+
+
+function rotateZ(angle) {
+
+  rz += angle;
+
+  updateModel();
+
+}
+
+
+/* =================================================
+   RESET
+   ================================================= */
+
+function resetModel() {
+
+  x = 0;
+  y = 1.3;
+  z = 0;
+
+  scaleValue = 2;
+
+  rx = 0;
+  ry = 0;
+  rz = 0;
+
+  updateModel();
+
+}
+
+
+/* =================================================
+   MISSION ACCOMPLIE
+   ================================================= */
+
+function missionComplete() {
+
+  document.querySelector("#panel").style.display =
+    "none";
+
+  document.querySelector("#success").style.display =
+    "block";
+
+}
+
+
+/* =================================================
+   REJOUER
+   ================================================= */
+
+function replay() {
+
+  resetModel();
+
+  document.querySelector("#success").style.display =
+    "none";
+
+  document.querySelector("#panel").style.display =
+    "block";
+
+}
+
+
+/* =================================================
+   APPUI PROLONGÉ
+   ================================================= */
+
+let holdTimer = null;
+
+function startHold(action) {
+
+  stopHold();
+
+  holdTimer = setInterval(function() {
+
+    switch(action) {
+
+      case "left":
+        move(-0.05,0,0);
+        break;
+
+      case "right":
+        move(0.05,0,0);
+        break;
+
+      case "up":
+        move(0,0.05,0);
+        break;
+
+      case "down":
+        move(0,-0.05,0);
+        break;
+
+      case "forward":
+        move(0,0,0.05);
+        break;
+
+      case "backward":
+        move(0,0,-0.05);
+        break;
+
+      case "rxminus":
+        rotateX(-2);
+        break;
+
+      case "rxplus":
+        rotateX(2);
+        break;
+
+      case "ryminus":
+        rotateY(-2);
+        break;
+
+      case "ryplus":
+        rotateY(2);
+        break;
+
+      case "rzminus":
+        rotateZ(-2);
+        break;
+
+      case "rzplus":
+        rotateZ(2);
+        break;
+
+      case "bigger":
+        resizeModel(1.02);
+        break;
+
+      case "smaller":
+        resizeModel(0.98);
+        break;
+
+    }
+
+  },100);
+
+}
+
+
+function stopHold() {
+
+  if (holdTimer) {
+
+    clearInterval(holdTimer);
+
+    holdTimer = null;
+
+  }
+
+}
+
+
+/* =================================================
+   ACTIVATION DES APPUIS PROLONGÉS
+   ================================================= */
+
+document
+  .querySelectorAll("[data-action]")
+  .forEach(function(button) {
+
+    button.addEventListener(
+      "pointerdown",
+      function() {
+
+        startHold(
+          button.dataset.action
+        );
+
+      }
+    );
+
+
+    button.addEventListener(
+      "pointerup",
+      stopHold
+    );
+
+
+    button.addEventListener(
+      "pointerleave",
+      stopHold
+    );
+
+
+    button.addEventListener(
+      "pointercancel",
+      stopHold
+    );
+
+  });
+
+
+/* =================================================
+   INITIALISATION
+   ================================================= */
+
+window.addEventListener(
+  "load",
+  function() {
+
+    setTimeout(
+      updateModel,
+      1000
+    );
+
+  }
+);
+
+
+</script>
+
+</body>
+</html>
