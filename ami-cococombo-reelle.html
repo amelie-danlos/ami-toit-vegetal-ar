@@ -8,29 +8,32 @@
   <meta name="viewport"
         content="width=device-width,
         initial-scale=1.0,
+        maximum-scale=1.0,
         user-scalable=no">
 
   <title>Mission CocoCombo</title>
 
-  <!-- A-FRAME -->
   <script src="https://aframe.io/releases/1.6.0/aframe.min.js"></script>
 
-  <!-- MINDAR -->
   <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
 
 
   <style>
 
+    html,
     body {
       margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
       overflow: hidden;
       font-family: Arial, sans-serif;
     }
 
 
-    /* =================================================
-       PETIT PANNEAU EN BAS
-       ================================================= */
+    /* =========================
+       PANNEAU COMPACT
+       ========================= */
 
     #panel {
 
@@ -39,22 +42,18 @@
       z-index: 9999;
 
       bottom: 6px;
-      left: 50%;
-
-      transform: translateX(-50%);
-
-      width: 96%;
-      max-width: 600px;
+      left: 5px;
+      right: 5px;
 
       background: rgba(255,255,255,0.90);
 
       border-radius: 14px;
 
-      padding: 5px;
+      padding: 5px 3px;
 
       text-align: center;
 
-      box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+      box-sizing: border-box;
 
     }
 
@@ -67,49 +66,49 @@
 
       color: #08783e;
 
-      margin-bottom: 4px;
+      margin-bottom: 3px;
 
     }
 
-
-    /* =================================================
-       LIGNE DE COMMANDES
-       ================================================= */
 
     .controls {
 
       display: flex;
 
-      align-items: center;
-
       justify-content: center;
+
+      align-items: center;
 
       gap: 3px;
 
-      flex-wrap: nowrap;
+      width: 100%;
+
+      box-sizing: border-box;
+
+      margin: 2px 0;
 
     }
 
 
     button {
 
-      font-size: 17px;
+      height: 34px;
 
-      min-width: 34px;
+      min-width: 0;
 
-      height: 36px;
+      padding: 2px 7px;
 
-      padding: 2px 5px;
-
-      margin: 0;
+      font-size: 16px;
 
       border: 1px solid #777;
 
-      border-radius: 8px;
+      border-radius: 7px;
 
       background: white;
 
       touch-action: none;
+
+      flex-shrink: 1;
 
     }
 
@@ -118,31 +117,28 @@
 
       background: #dff4e7;
 
-      transform: scale(0.95);
-
     }
 
 
-    /* bouton permettant de choisir X / Y / Z */
+    .smallText {
 
-    #rotationMode {
-
-      min-width: 72px;
-
-      font-size: 10px;
+      font-size: 11px;
 
       font-weight: bold;
 
-      line-height: 11px;
+    }
+
+
+    #rotationMode {
+
+      font-size: 11px;
+
+      min-width: 75px;
 
     }
 
 
-    /* bouton validation */
-
     #successButton {
-
-      min-width: 38px;
 
       background: #148447;
 
@@ -150,16 +146,17 @@
 
       border: none;
 
-      font-size: 19px;
-
       font-weight: bold;
+
+      padding-left: 12px;
+      padding-right: 12px;
 
     }
 
 
-    /* =================================================
-       MESSAGE DE RÉUSSITE
-       ================================================= */
+    /* =========================
+       MESSAGE FINAL
+       ========================= */
 
     #success {
 
@@ -174,25 +171,24 @@
 
       transform: translateX(-50%);
 
-      width: 82%;
-      max-width: 420px;
+      width: 80%;
+
+      max-width: 400px;
 
       background: rgba(255,255,255,0.92);
 
-      padding: 9px;
+      padding: 10px;
 
       border-radius: 14px;
 
       text-align: center;
-
-      box-shadow: 0 2px 10px rgba(0,0,0,0.25);
 
     }
 
 
     #successTitle {
 
-      font-size: 19px;
+      font-size: 18px;
 
       font-weight: bold;
 
@@ -205,20 +201,16 @@
 
       font-size: 13px;
 
-      margin: 4px;
+      margin: 5px;
 
     }
 
 
     #replayButton {
 
-      height: 32px;
-
       font-size: 13px;
 
-      padding: 3px 10px;
-
-      margin-top: 3px;
+      height: 32px;
 
     }
 
@@ -228,13 +220,12 @@
 </head>
 
 
-
 <body>
 
 
-<!-- =================================================
-     INTERFACE DU JEU
-     ================================================= -->
+<!-- =========================
+     COMMANDES
+     ========================= -->
 
 
 <div id="panel">
@@ -247,82 +238,86 @@
   </div>
 
 
+
+  <!-- LIGNE 1 : POSITION -->
+
+
   <div class="controls">
 
 
-    <!-- GAUCHE / DROITE -->
+    <span class="smallText">
+      Position
+    </span>
 
-    <button
-      data-action="left">
+
+    <button data-action="left">
       ⬅️
     </button>
 
 
-    <button
-      data-action="right">
+    <button data-action="right">
       ➡️
     </button>
 
 
-
-    <!-- HAUT / BAS -->
-
-    <button
-      data-action="up">
+    <button data-action="up">
       ⬆️
     </button>
 
 
-    <button
-      data-action="down">
+    <button data-action="down">
       ⬇️
     </button>
 
 
-
-    <!-- AVANT / ARRIERE -->
-
-    <button
-      data-action="forward">
+    <button data-action="forward">
       ＋
     </button>
 
 
-    <button
-      data-action="backward">
+    <button data-action="backward">
       －
     </button>
 
 
+  </div>
 
-    <!-- CHOIX DE LA ROTATION -->
+
+
+  <!-- LIGNE 2 : ROTATION -->
+
+
+  <div class="controls">
+
 
     <button
       id="rotationMode"
       onclick="changeRotationMode()">
 
-      🔄<br>Tourner
+      🔄 Tourner
 
     </button>
 
 
-
-    <!-- ROTATION - / + -->
-
-    <button
-      data-action="rotminus">
+    <button data-action="rotminus">
       ↶
     </button>
 
 
-    <button
-      data-action="rotplus">
+    <button data-action="rotplus">
       ↷
     </button>
 
 
+    <button data-action="smaller">
+      🔎−
+    </button>
 
-    <!-- VALIDATION -->
+
+    <button data-action="bigger">
+      🔎+
+    </button>
+
 
     <button
       id="successButton"
@@ -340,9 +335,9 @@
 
 
 
-<!-- =================================================
-     MESSAGE FINAL
-     ================================================= -->
+<!-- =========================
+     MESSAGE DE RÉUSSITE
+     ========================= -->
 
 
 <div id="success">
@@ -358,10 +353,6 @@
   <div id="successText">
 
     Vous avez végétalisé la Citroën AMI ! 🌿
-
-    <br>
-
-    📸 Admirez votre création !
 
   </div>
 
@@ -379,9 +370,9 @@
 
 
 
-<!-- =================================================
-     SCÈNE DE RÉALITÉ AUGMENTÉE
-     ================================================= -->
+<!-- =========================
+     SCÈNE MINDAR
+     ========================= -->
 
 
 <a-scene
@@ -396,19 +387,19 @@
     missTolerance: 5;
   "
 
+  embedded
+
   color-space="sRGB"
 
   renderer="
     colorManagement: true;
-    physicallyCorrectLights
+    physicallyCorrectLights: true;
+    alpha: true;
   "
 
   vr-mode-ui="enabled: false"
 
   device-orientation-permission-ui="enabled: false">
-
-
-  <!-- MODÈLE 3D -->
 
 
   <a-assets>
@@ -427,9 +418,6 @@
 
 
 
-  <!-- CAMÉRA -->
-
-
   <a-camera
 
     position="0 0 0"
@@ -440,18 +428,9 @@
 
 
 
-  <!-- CIBLE COCO -->
-
-
   <a-entity
 
     mindar-image-target="targetIndex: 0">
-
-
-    <!--
-      Ce conteneur reçoit toutes les transformations.
-      Le modèle GLB reste à l'intérieur.
-    -->
 
 
     <a-entity id="roofContainer">
@@ -477,9 +456,9 @@
 <script>
 
 
-/* =================================================
-   POSITION DE DÉPART
-   ================================================= */
+/* =========================
+   VALEURS DE DÉPART
+   ========================= */
 
 
 let x = 0;
@@ -499,23 +478,13 @@ let ry = 0;
 let rz = 0;
 
 
-
-/*
-  Rotation sélectionnée.
-
-  Y = tourner
-  X = incliner
-  Z = basculer
-*/
-
-
 let rotationMode = "Y";
 
 
 
-/* =================================================
-   MISE À JOUR DU TOIT
-   ================================================= */
+/* =========================
+   MISE À JOUR DU MODÈLE
+   ========================= */
 
 
 function updateModel() {
@@ -532,10 +501,6 @@ function updateModel() {
   }
 
 
-
-  /* POSITION */
-
-
   container.object3D.position.set(
 
     x,
@@ -547,10 +512,6 @@ function updateModel() {
   );
 
 
-
-  /* TAILLE */
-
-
   container.object3D.scale.set(
 
     scaleValue,
@@ -560,10 +521,6 @@ function updateModel() {
     scaleValue
 
   );
-
-
-
-  /* ROTATIONS */
 
 
   container.object3D.rotation.set(
@@ -583,9 +540,9 @@ function updateModel() {
 
 
 
-/* =================================================
+/* =========================
    DÉPLACEMENT
-   ================================================= */
+   ========================= */
 
 
 function move(dx,dy,dz) {
@@ -605,9 +562,9 @@ function move(dx,dy,dz) {
 
 
 
-/* =================================================
+/* =========================
    TAILLE
-   ================================================= */
+   ========================= */
 
 
 function resizeModel(factor) {
@@ -623,16 +580,15 @@ function resizeModel(factor) {
 
 
 
-/* =================================================
-   ROTATIONS X / Y / Z
-   ================================================= */
+/* =========================
+   ROTATIONS
+   ========================= */
 
 
 function rotateX(angle) {
 
 
   rx += angle;
-
 
   updateModel();
 
@@ -646,7 +602,6 @@ function rotateY(angle) {
 
   ry += angle;
 
-
   updateModel();
 
 
@@ -659,7 +614,6 @@ function rotateZ(angle) {
 
   rz += angle;
 
-
   updateModel();
 
 
@@ -667,9 +621,9 @@ function rotateZ(angle) {
 
 
 
-/* =================================================
-   CHANGEMENT DU TYPE DE ROTATION
-   ================================================= */
+/* =========================
+   CHOIX ROTATION
+   ========================= */
 
 
 function changeRotationMode() {
@@ -679,20 +633,13 @@ function changeRotationMode() {
     document.querySelector("#rotationMode");
 
 
-
-  /*
-    Y -> X -> Z -> Y
-  */
-
-
   if (rotationMode === "Y") {
 
 
     rotationMode = "X";
 
-
     button.innerHTML =
-      "↕️<br>Incliner";
+      "↕️ Incliner";
 
 
   }
@@ -703,9 +650,8 @@ function changeRotationMode() {
 
     rotationMode = "Z";
 
-
     button.innerHTML =
-      "↔️<br>Basculer";
+      "↔️ Basculer";
 
 
   }
@@ -716,9 +662,8 @@ function changeRotationMode() {
 
     rotationMode = "Y";
 
-
     button.innerHTML =
-      "🔄<br>Tourner";
+      "🔄 Tourner";
 
 
   }
@@ -728,9 +673,9 @@ function changeRotationMode() {
 
 
 
-/* =================================================
+/* =========================
    ROTATION ACTIVE
-   ================================================= */
+   ========================= */
 
 
 function rotateCurrent(angle) {
@@ -767,9 +712,9 @@ function rotateCurrent(angle) {
 
 
 
-/* =================================================
-   RÉINITIALISATION
-   ================================================= */
+/* =========================
+   RESET
+   ========================= */
 
 
 function resetModel() {
@@ -796,7 +741,7 @@ function resetModel() {
 
 
   document.querySelector("#rotationMode").innerHTML =
-    "🔄<br>Tourner";
+    "🔄 Tourner";
 
 
   updateModel();
@@ -806,18 +751,12 @@ function resetModel() {
 
 
 
-/* =================================================
-   MISSION ACCOMPLIE
-   ================================================= */
+/* =========================
+   MISSION RÉUSSIE
+   ========================= */
 
 
 function missionComplete() {
-
-
-  /*
-    On cache complètement les commandes
-    pour laisser voir la voiture.
-  */
 
 
   document.querySelector("#panel").style.display =
@@ -832,9 +771,9 @@ function missionComplete() {
 
 
 
-/* =================================================
+/* =========================
    REJOUER
-   ================================================= */
+   ========================= */
 
 
 function replay() {
@@ -855,13 +794,9 @@ function replay() {
 
 
 
-/* =================================================
-   APPUI PROLONGÉ
-   ================================================= */
-
-
-let holdTimer = null;
-
+/* =========================
+   COMMANDES
+   ========================= */
 
 
 function performAction(action) {
@@ -877,13 +812,11 @@ function performAction(action) {
       break;
 
 
-
     case "right":
 
       move(0.05,0,0);
 
       break;
-
 
 
     case "up":
@@ -893,13 +826,11 @@ function performAction(action) {
       break;
 
 
-
     case "down":
 
       move(0,-0.05,0);
 
       break;
-
 
 
     case "forward":
@@ -909,13 +840,11 @@ function performAction(action) {
       break;
 
 
-
     case "backward":
 
       move(0,0,-0.05);
 
       break;
-
 
 
     case "rotminus":
@@ -925,10 +854,23 @@ function performAction(action) {
       break;
 
 
-
     case "rotplus":
 
       rotateCurrent(2);
+
+      break;
+
+
+    case "smaller":
+
+      resizeModel(0.98);
+
+      break;
+
+
+    case "bigger":
+
+      resizeModel(1.02);
 
       break;
 
@@ -940,26 +882,22 @@ function performAction(action) {
 
 
 
+/* =========================
+   APPUI PROLONGÉ
+   ========================= */
+
+
+let holdTimer = null;
+
+
+
 function startHold(action) {
 
 
   stopHold();
 
 
-  /*
-    Petit mouvement immédiat
-    dès qu'on appuie.
-  */
-
-
   performAction(action);
-
-
-
-  /*
-    Puis déplacement continu
-    si on garde le doigt appuyé.
-  */
 
 
   holdTimer =
@@ -988,7 +926,6 @@ function stopHold() {
 
     clearInterval(holdTimer);
 
-
     holdTimer = null;
 
 
@@ -999,9 +936,9 @@ function stopHold() {
 
 
 
-/* =================================================
+/* =========================
    ACTIVATION DES BOUTONS
-   ================================================= */
+   ========================= */
 
 
 document
@@ -1029,45 +966,26 @@ document
     );
 
 
-
     button.addEventListener(
-
       "pointerup",
-
       stopHold
-
     );
 
 
-
     button.addEventListener(
-
       "pointerleave",
-
       stopHold
-
     );
 
 
-
     button.addEventListener(
-
       "pointercancel",
-
       stopHold
-
     );
 
 
   });
 
-
-
-/*
-  Important :
-  si le doigt quitte la zone des boutons,
-  on arrête aussi le mouvement.
-*/
 
 
 document.addEventListener(
@@ -1080,9 +998,9 @@ document.addEventListener(
 
 
 
-/* =================================================
+/* =========================
    INITIALISATION
-   ================================================= */
+   ========================= */
 
 
 window.addEventListener(
