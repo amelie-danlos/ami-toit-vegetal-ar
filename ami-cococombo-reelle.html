@@ -1,14 +1,23 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
+
   <meta charset="UTF-8">
+
   <meta name="viewport"
-        content="width=device-width, initial-scale=1.0">
+        content="width=device-width,
+        initial-scale=1.0,
+        user-scalable=no">
 
   <title>Mission CocoCombo</title>
 
+  <!-- A-FRAME -->
   <script src="https://aframe.io/releases/1.6.0/aframe.min.js"></script>
+
+  <!-- MINDAR -->
   <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
+
 
   <style>
 
@@ -18,143 +27,206 @@
       font-family: Arial, sans-serif;
     }
 
-    /* -------------------------
-       PANNEAU DU JEU
-       ------------------------- */
+
+    /* =================================================
+       PETIT PANNEAU EN BAS
+       ================================================= */
 
     #panel {
+
       position: fixed;
+
       z-index: 9999;
-      bottom: 8px;
+
+      bottom: 6px;
       left: 50%;
+
       transform: translateX(-50%);
 
-      width: 94%;
-      max-width: 520px;
+      width: 96%;
+      max-width: 600px;
 
-      background: rgba(255,255,255,0.92);
+      background: rgba(255,255,255,0.90);
 
-      border-radius: 18px;
-      padding: 8px;
+      border-radius: 14px;
+
+      padding: 5px;
 
       text-align: center;
 
-      box-shadow: 0 3px 15px rgba(0,0,0,0.25);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+
     }
+
 
     #title {
-      font-size: 20px;
+
+      font-size: 13px;
+
       font-weight: bold;
+
       color: #08783e;
-      margin-bottom: 2px;
+
+      margin-bottom: 4px;
+
     }
 
-    #instruction {
-      font-size: 12px;
-      margin-bottom: 6px;
+
+    /* =================================================
+       LIGNE DE COMMANDES
+       ================================================= */
+
+    .controls {
+
+      display: flex;
+
+      align-items: center;
+
+      justify-content: center;
+
+      gap: 3px;
+
+      flex-wrap: nowrap;
+
     }
 
-    .row {
-      margin: 3px 0;
-    }
-
-    .label {
-      font-size: 11px;
-      font-weight: bold;
-      color: #444;
-    }
 
     button {
-      font-size: 15px;
 
-      min-width: 58px;
+      font-size: 17px;
 
-      padding: 7px 10px;
-      margin: 2px;
+      min-width: 34px;
+
+      height: 36px;
+
+      padding: 2px 5px;
+
+      margin: 0;
 
       border: 1px solid #777;
-      border-radius: 9px;
+
+      border-radius: 8px;
 
       background: white;
 
-      touch-action: manipulation;
+      touch-action: none;
+
     }
+
 
     button:active {
+
       background: #dff4e7;
-      transform: scale(0.96);
+
+      transform: scale(0.95);
+
     }
 
-    /* bouton mission */
 
-    #successButton {
-      margin-top: 5px;
+    /* bouton permettant de choisir X / Y / Z */
 
-      padding: 9px 18px;
+    #rotationMode {
 
-      font-size: 16px;
+      min-width: 72px;
+
+      font-size: 10px;
+
       font-weight: bold;
 
+      line-height: 11px;
+
+    }
+
+
+    /* bouton validation */
+
+    #successButton {
+
+      min-width: 38px;
+
       background: #148447;
+
       color: white;
 
       border: none;
-      border-radius: 12px;
+
+      font-size: 19px;
+
+      font-weight: bold;
+
     }
 
 
-    /* -------------------------
-       ÉCRAN DE RÉUSSITE
-       ------------------------- */
+    /* =================================================
+       MESSAGE DE RÉUSSITE
+       ================================================= */
 
     #success {
+
       display: none;
 
       position: fixed;
+
       z-index: 10000;
 
-      top: 12px;
+      top: 10px;
       left: 50%;
+
       transform: translateX(-50%);
 
-      width: 88%;
-      max-width: 480px;
+      width: 82%;
+      max-width: 420px;
 
       background: rgba(255,255,255,0.92);
 
-      padding: 12px;
+      padding: 9px;
 
-      border-radius: 18px;
+      border-radius: 14px;
 
       text-align: center;
 
-      box-shadow: 0 3px 15px rgba(0,0,0,0.25);
+      box-shadow: 0 2px 10px rgba(0,0,0,0.25);
+
     }
+
 
     #successTitle {
-      font-size: 22px;
+
+      font-size: 19px;
+
       font-weight: bold;
+
       color: #08783e;
+
     }
+
 
     #successText {
-      font-size: 14px;
-      margin: 5px;
+
+      font-size: 13px;
+
+      margin: 4px;
+
     }
+
 
     #replayButton {
-      font-size: 14px;
-      padding: 7px 14px;
-      margin-top: 5px;
 
-      border-radius: 10px;
-      border: 1px solid #777;
+      height: 32px;
 
-      background: white;
+      font-size: 13px;
+
+      padding: 3px 10px;
+
+      margin-top: 3px;
+
     }
 
+
   </style>
+
 </head>
+
 
 
 <body>
@@ -164,158 +236,105 @@
      INTERFACE DU JEU
      ================================================= -->
 
+
 <div id="panel">
 
+
   <div id="title">
-    🌿 Mission CocoCombo 🌿
+
+    🌿 Posez le toit végétalisé sur l'AMI !
+
   </div>
 
-  <div id="instruction">
-    Placez le toit végétalisé sur la Citroën AMI !
-  </div>
+
+  <div class="controls">
 
 
-  <!-- POSITION -->
-
-  <div class="row">
-
-    <span class="label">DÉPLACER</span><br>
+    <!-- GAUCHE / DROITE -->
 
     <button
-      data-action="left"
-      onclick="move(-0.1,0,0)">
+      data-action="left">
       ⬅️
     </button>
 
-    <button
-      data-action="up"
-      onclick="move(0,0.1,0)">
-      ⬆️
-    </button>
 
     <button
-      data-action="down"
-      onclick="move(0,-0.1,0)">
-      ⬇️
-    </button>
-
-    <button
-      data-action="right"
-      onclick="move(0.1,0,0)">
+      data-action="right">
       ➡️
     </button>
 
-  </div>
 
 
-  <!-- PROFONDEUR -->
-
-  <div class="row">
-
-    <span class="label">AVANT / ARRIÈRE</span><br>
+    <!-- HAUT / BAS -->
 
     <button
-      data-action="forward"
-      onclick="move(0,0,0.1)">
-      ⬆ Avant
+      data-action="up">
+      ⬆️
     </button>
 
+
     <button
-      data-action="backward"
-      onclick="move(0,0,-0.1)">
-      ⬇ Arrière
+      data-action="down">
+      ⬇️
     </button>
 
-  </div>
 
 
-  <!-- ROTATIONS -->
-
-  <div class="row">
-
-    <span class="label">INCLINER</span><br>
+    <!-- AVANT / ARRIERE -->
 
     <button
-      data-action="rxminus"
-      onclick="rotateX(-5)">
-      ↖
+      data-action="forward">
+      ＋
     </button>
 
+
     <button
-      data-action="rxplus"
-      onclick="rotateX(5)">
-      ↘
+      data-action="backward">
+      －
     </button>
 
-  </div>
 
 
-  <div class="row">
-
-    <span class="label">TOURNER</span><br>
+    <!-- CHOIX DE LA ROTATION -->
 
     <button
-      data-action="ryminus"
-      onclick="rotateY(-5)">
+      id="rotationMode"
+      onclick="changeRotationMode()">
+
+      🔄<br>Tourner
+
+    </button>
+
+
+
+    <!-- ROTATION - / + -->
+
+    <button
+      data-action="rotminus">
       ↶
     </button>
 
+
     <button
-      data-action="ryplus"
-      onclick="rotateY(5)">
+      data-action="rotplus">
       ↷
     </button>
 
-  </div>
 
 
-  <div class="row">
-
-    <span class="label">BASCULER</span><br>
+    <!-- VALIDATION -->
 
     <button
-      data-action="rzminus"
-      onclick="rotateZ(-5)">
-      ↙
+      id="successButton"
+      onclick="missionComplete()">
+
+      ✓
+
     </button>
 
-    <button
-      data-action="rzplus"
-      onclick="rotateZ(5)">
-      ↗
-    </button>
 
   </div>
 
-
-  <!-- TAILLE -->
-
-  <div class="row">
-
-    <span class="label">TAILLE</span><br>
-
-    <button
-      data-action="smaller"
-      onclick="resizeModel(0.95)">
-      ➖
-    </button>
-
-    <button
-      data-action="bigger"
-      onclick="resizeModel(1.05)">
-      ➕
-    </button>
-
-  </div>
-
-
-  <button
-    id="successButton"
-    onclick="missionComplete()">
-
-    🌿 Mission accomplie !
-
-  </button>
 
 </div>
 
@@ -325,17 +344,27 @@
      MESSAGE FINAL
      ================================================= -->
 
+
 <div id="success">
 
+
   <div id="successTitle">
-    🎉 Bravo !
+
+    🎉 Mission réussie !
+
   </div>
 
+
   <div id="successText">
+
     Vous avez végétalisé la Citroën AMI ! 🌿
+
     <br>
+
     📸 Admirez votre création !
+
   </div>
+
 
   <button
     id="replayButton"
@@ -345,13 +374,15 @@
 
   </button>
 
+
 </div>
 
 
 
 <!-- =================================================
-     SCÈNE AR
+     SCÈNE DE RÉALITÉ AUGMENTÉE
      ================================================= -->
+
 
 <a-scene
 
@@ -377,36 +408,67 @@
   device-orientation-permission-ui="enabled: false">
 
 
+  <!-- MODÈLE 3D -->
+
+
   <a-assets>
 
+
     <a-asset-item
+
       id="toit"
+
       src="./soil+block+planter+3d+model.glb">
+
     </a-asset-item>
+
 
   </a-assets>
 
 
+
+  <!-- CAMÉRA -->
+
+
   <a-camera
+
     position="0 0 0"
+
     look-controls="enabled: false">
+
   </a-camera>
 
 
+
+  <!-- CIBLE COCO -->
+
+
   <a-entity
+
     mindar-image-target="targetIndex: 0">
+
+
+    <!--
+      Ce conteneur reçoit toutes les transformations.
+      Le modèle GLB reste à l'intérieur.
+    -->
 
 
     <a-entity id="roofContainer">
 
+
       <a-gltf-model
+
         src="#toit">
+
       </a-gltf-model>
+
 
     </a-entity>
 
 
   </a-entity>
+
 
 </a-scene>
 
@@ -416,46 +478,92 @@
 
 
 /* =================================================
-   POSITION INITIALE
+   POSITION DE DÉPART
    ================================================= */
 
+
 let x = 0;
+
 let y = 1.3;
+
 let z = 0;
+
 
 let scaleValue = 2;
 
+
 let rx = 0;
+
 let ry = 0;
+
 let rz = 0;
 
 
+
+/*
+  Rotation sélectionnée.
+
+  Y = tourner
+  X = incliner
+  Z = basculer
+*/
+
+
+let rotationMode = "Y";
+
+
+
 /* =================================================
-   MISE À JOUR
+   MISE À JOUR DU TOIT
    ================================================= */
 
+
 function updateModel() {
+
 
   const container =
     document.querySelector("#roofContainer");
 
+
   if (!container || !container.object3D) {
+
     return;
+
   }
 
 
+
+  /* POSITION */
+
+
   container.object3D.position.set(
+
     x,
+
     y,
+
     z
+
   );
+
+
+
+  /* TAILLE */
 
 
   container.object3D.scale.set(
+
     scaleValue,
+
     scaleValue,
+
     scaleValue
+
   );
+
+
+
+  /* ROTATIONS */
 
 
   container.object3D.rotation.set(
@@ -470,269 +578,537 @@ function updateModel() {
 
   );
 
+
 }
+
 
 
 /* =================================================
    DÉPLACEMENT
    ================================================= */
 
+
 function move(dx,dy,dz) {
 
+
   x += dx;
+
   y += dy;
+
   z += dz;
+
 
   updateModel();
 
+
 }
+
 
 
 /* =================================================
    TAILLE
    ================================================= */
 
+
 function resizeModel(factor) {
+
 
   scaleValue *= factor;
 
+
   updateModel();
 
+
 }
+
 
 
 /* =================================================
-   ROTATIONS
+   ROTATIONS X / Y / Z
    ================================================= */
+
 
 function rotateX(angle) {
 
+
   rx += angle;
+
 
   updateModel();
 
+
 }
+
 
 
 function rotateY(angle) {
 
+
   ry += angle;
+
 
   updateModel();
 
+
 }
+
 
 
 function rotateZ(angle) {
 
+
   rz += angle;
+
 
   updateModel();
 
+
 }
+
 
 
 /* =================================================
-   RESET
+   CHANGEMENT DU TYPE DE ROTATION
    ================================================= */
+
+
+function changeRotationMode() {
+
+
+  const button =
+    document.querySelector("#rotationMode");
+
+
+
+  /*
+    Y -> X -> Z -> Y
+  */
+
+
+  if (rotationMode === "Y") {
+
+
+    rotationMode = "X";
+
+
+    button.innerHTML =
+      "↕️<br>Incliner";
+
+
+  }
+
+
+  else if (rotationMode === "X") {
+
+
+    rotationMode = "Z";
+
+
+    button.innerHTML =
+      "↔️<br>Basculer";
+
+
+  }
+
+
+  else {
+
+
+    rotationMode = "Y";
+
+
+    button.innerHTML =
+      "🔄<br>Tourner";
+
+
+  }
+
+
+}
+
+
+
+/* =================================================
+   ROTATION ACTIVE
+   ================================================= */
+
+
+function rotateCurrent(angle) {
+
+
+  if (rotationMode === "X") {
+
+
+    rotateX(angle);
+
+
+  }
+
+
+  else if (rotationMode === "Y") {
+
+
+    rotateY(angle);
+
+
+  }
+
+
+  else {
+
+
+    rotateZ(angle);
+
+
+  }
+
+
+}
+
+
+
+/* =================================================
+   RÉINITIALISATION
+   ================================================= */
+
 
 function resetModel() {
 
+
   x = 0;
+
   y = 1.3;
+
   z = 0;
+
 
   scaleValue = 2;
 
+
   rx = 0;
+
   ry = 0;
+
   rz = 0;
+
+
+  rotationMode = "Y";
+
+
+  document.querySelector("#rotationMode").innerHTML =
+    "🔄<br>Tourner";
+
 
   updateModel();
 
+
 }
+
 
 
 /* =================================================
    MISSION ACCOMPLIE
    ================================================= */
 
+
 function missionComplete() {
+
+
+  /*
+    On cache complètement les commandes
+    pour laisser voir la voiture.
+  */
+
 
   document.querySelector("#panel").style.display =
     "none";
 
+
   document.querySelector("#success").style.display =
     "block";
 
+
 }
+
 
 
 /* =================================================
    REJOUER
    ================================================= */
 
+
 function replay() {
 
+
   resetModel();
+
 
   document.querySelector("#success").style.display =
     "none";
 
+
   document.querySelector("#panel").style.display =
     "block";
 
+
 }
+
 
 
 /* =================================================
    APPUI PROLONGÉ
    ================================================= */
 
+
 let holdTimer = null;
+
+
+
+function performAction(action) {
+
+
+  switch(action) {
+
+
+    case "left":
+
+      move(-0.05,0,0);
+
+      break;
+
+
+
+    case "right":
+
+      move(0.05,0,0);
+
+      break;
+
+
+
+    case "up":
+
+      move(0,0.05,0);
+
+      break;
+
+
+
+    case "down":
+
+      move(0,-0.05,0);
+
+      break;
+
+
+
+    case "forward":
+
+      move(0,0,0.05);
+
+      break;
+
+
+
+    case "backward":
+
+      move(0,0,-0.05);
+
+      break;
+
+
+
+    case "rotminus":
+
+      rotateCurrent(-2);
+
+      break;
+
+
+
+    case "rotplus":
+
+      rotateCurrent(2);
+
+      break;
+
+
+  }
+
+
+}
+
+
 
 function startHold(action) {
 
+
   stopHold();
 
-  holdTimer = setInterval(function() {
 
-    switch(action) {
+  /*
+    Petit mouvement immédiat
+    dès qu'on appuie.
+  */
 
-      case "left":
-        move(-0.05,0,0);
-        break;
 
-      case "right":
-        move(0.05,0,0);
-        break;
+  performAction(action);
 
-      case "up":
-        move(0,0.05,0);
-        break;
 
-      case "down":
-        move(0,-0.05,0);
-        break;
 
-      case "forward":
-        move(0,0,0.05);
-        break;
+  /*
+    Puis déplacement continu
+    si on garde le doigt appuyé.
+  */
 
-      case "backward":
-        move(0,0,-0.05);
-        break;
 
-      case "rxminus":
-        rotateX(-2);
-        break;
+  holdTimer =
+    setInterval(
 
-      case "rxplus":
-        rotateX(2);
-        break;
+      function() {
 
-      case "ryminus":
-        rotateY(-2);
-        break;
+        performAction(action);
 
-      case "ryplus":
-        rotateY(2);
-        break;
+      },
 
-      case "rzminus":
-        rotateZ(-2);
-        break;
+      100
 
-      case "rzplus":
-        rotateZ(2);
-        break;
+    );
 
-      case "bigger":
-        resizeModel(1.02);
-        break;
-
-      case "smaller":
-        resizeModel(0.98);
-        break;
-
-    }
-
-  },100);
 
 }
+
 
 
 function stopHold() {
 
+
   if (holdTimer) {
+
 
     clearInterval(holdTimer);
 
+
     holdTimer = null;
 
+
   }
+
 
 }
 
 
+
 /* =================================================
-   ACTIVATION DES APPUIS PROLONGÉS
+   ACTIVATION DES BOUTONS
    ================================================= */
+
 
 document
   .querySelectorAll("[data-action]")
   .forEach(function(button) {
 
+
     button.addEventListener(
+
       "pointerdown",
-      function() {
+
+      function(event) {
+
+
+        event.preventDefault();
+
 
         startHold(
           button.dataset.action
         );
 
+
       }
+
     );
 
 
+
     button.addEventListener(
+
       "pointerup",
+
       stopHold
+
     );
 
 
+
     button.addEventListener(
+
       "pointerleave",
+
       stopHold
+
     );
+
 
 
     button.addEventListener(
+
       "pointercancel",
+
       stopHold
+
     );
+
 
   });
+
+
+
+/*
+  Important :
+  si le doigt quitte la zone des boutons,
+  on arrête aussi le mouvement.
+*/
+
+
+document.addEventListener(
+
+  "pointerup",
+
+  stopHold
+
+);
+
 
 
 /* =================================================
    INITIALISATION
    ================================================= */
 
+
 window.addEventListener(
+
   "load",
+
   function() {
 
+
     setTimeout(
+
       updateModel,
+
       1000
+
     );
 
+
   }
+
 );
 
 
 </script>
 
+
 </body>
+
 </html>
